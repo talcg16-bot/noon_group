@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduManage | Modern Course Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --accent: #10b981;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 300ms ease-in-out;
+            --radius: 8px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-xxl: 48px;
+        }
+
+        .dark-mode {
+            --background: #0f172a;
+            --text: #f1f5f9;
+            --card-bg: #1e293b;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.75rem; }
+        h4 { font-size: 1.5rem; }
+        h5 { font-size: 1.25rem; }
+        h6 { font-size: 1.1rem; }
+
+        p {
+            font-weight: 400;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Layout */
+        .grid {
+            display: grid;
+            gap: var(--spacing-md);
+        }
+
+        .grid-cols-12 {
+            grid-template-columns: repeat(12, 1fr);
+        }
+
+        .col-span-1 { grid-column: span 1; }
+        .col-span-2 { grid-column: span 2; }
+        .col-span-3 { grid-column: span 3; }
+        .col-span-4 { grid-column: span 4; }
+        .col-span-5 { grid-column: span 5; }
+        .col-span-6 { grid-column: span 6; }
+        .col-span-7 { grid-column: span 7; }
+        .col-span-8 { grid-column: span 8; }
+        .col-span-9 { grid-column: span 9; }
+        .col-span-10 { grid-column: span 10; }
+        .col-span-11 { grid-column: span 11; }
+        .col-span-12 { grid-column: span 12; }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: var(--spacing-lg);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background-color: #059669;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--card-bg);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .badge-info {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: var(--info);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background-color: var(--accent);
+            transition: width 0.5s ease;
+        }
+
+        /* Utilities */
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .gap-2 { gap: var(--spacing-sm); }
+        .gap-4 { gap: var(--spacing-md); }
+        .gap-6 { gap: var(--spacing-lg); }
+
+        .mt-2 { margin-top: var(--spacing-sm); }
+        .mt-4 { margin-top: var(--spacing-md); }
+        .mt-6 { margin-top: var(--spacing-lg); }
+        .mb-2 { margin-bottom: var(--spacing-sm); }
+        .mb-4 { margin-bottom: var(--spacing-md); }
+        .mb-6 { margin-bottom: var(--spacing-lg); }
+
+        .py-2 { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
+        .py-4 { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+        .px-4 { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .h-10 {
+            height: 2.5rem;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .col-span-1,
+            .col-span-2,
+            .col-span-3,
+            .col-span-4,
+            .col-span-5,
+            .col-span-6,
+            .col-span-7,
+            .col-span-8,
+            .col-span-9,
+            .col-span-10,
+            .col-span-11,
+            .col-span-12 {
+                grid-column: span 12;
+            }
+            
+            .grid {
+                gap: var(--spacing-sm);
+            }
+            
+            .card {
+                padding: var(--spacing-md);
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--card-bg);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-link {
+            color: var(--secondary);
+            text-decoration: none;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            min-height: calc(100vh - 70px);
+            padding: var(--spacing-lg) 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            margin: 0 var(--spacing-md);
+            border-radius: var(--radius);
+            color: var(--secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-item i {
+            margin-right: var(--spacing-sm);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Dashboard Styles */
+        .metric-card {
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: var(--spacing-md);
+            flex-shrink: 0;
+        }
+
+        /* Course Cards */
+        .course-card {
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--card-bg);
+            transition: var(--transition);
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .course-image {
+            height: 160px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .course-content {
+            padding: var(--spacing-md);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: rgba(37, 99, 235, 0.05);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(37, 99, 235, 0.03);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: var(--spacing-lg);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-lg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-sm);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: var(--spacing-md);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--secondary);
+            font-size: 1.25rem;
+        }
+
+        /* Responsive Grid */
+        @media (min-width: 768px) {
+            .md\:col-span-3 { grid-column: span 3; }
+            .md\:col-span-4 { grid-column: span 4; }
+            .md\:col-span-6 { grid-column: span 6; }
+            .md\:col-span-8 { grid-column: span 8; }
+            .md\:col-span-9 { grid-column: span 9; }
+            .md\:col-span-12 { grid-column: span 12; }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:col-span-3 { grid-column: span 3; }
+            .lg\:col-span-4 { grid-column: span 4; }
+            .lg\:col-span-6 { grid-column: span 6; }
+            .lg\:col-span-8 { grid-column: span 8; }
+            .lg\:col-span-9 { grid-column: span 9; }
+            .lg\:col-span-12 { grid-column: span 12; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Mock data
+        const mockCourses = [
+            { id: 1, title: "Advanced React Development", instructor: "Alex Johnson", progress: 75, image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600" },
+            { id: 2, title: "UI/UX Design Principles", instructor: "Sarah Williams", progress: 45, image: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=600" },
+            { id: 3, title: "Data Science Fundamentals", instructor: "Michael Chen", progress: 90, image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600" },
+            { id: 4, title: "Cloud Computing Essentials", instructor: "David Rodriguez", progress: 30, image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600" },
+            { id: 5, title: "Machine Learning Basics", instructor: "Emma Thompson", progress: 60, image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600" },
+            { id: 6, title: "Digital Marketing Strategy", instructor: "James Wilson", progress: 20, image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600" }
+        ];
+
+        const mockStudents = [
+            { id: 1, name: "John Smith", email: "john@example.com", status: "active", enrollmentDate: "2023-01-15", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+            { id: 2, name: "Emily Davis", email: "emily@example.com", status: "active", enrollmentDate: "2023-02-20", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+            { id: 3, name: "Michael Brown", email: "michael@example.com", status: "pending", enrollmentDate: "2023-03-10", avatar: "https://randomuser.me/api/portraits/men/22.jpg" },
+            { id: 4, name: "Sarah Johnson", email: "sarah@example.com", status: "completed", enrollmentDate: "2022-11-05", avatar: "https://randomuser.me/api/portraits/women/68.jpg" },
+            { id: 5, name: "Robert Garcia", email: "robert@example.com", status: "active", enrollmentDate: "2023-04-18", avatar: "https://randomuser.me/api/portraits/men/41.jpg" },
+            { id: 6, name: "Lisa Miller", email: "lisa@example.com", status: "inactive", enrollmentDate: "2022-09-30", avatar: "https://randomuser.me/api/portraits/women/65.jpg" }
+        ];
+
+        const mockActivities = [
+            { id: 1, user: "Alex Johnson", action: "created new course", time: "2 hours ago", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+            { id: 2, user: "Sarah Williams", action: "updated course materials", time: "5 hours ago", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+            { id: 3, user: "Michael Chen", action: "graded assignments", time: "1 day ago", avatar: "https://randomuser.me/api/portraits/men/22.jpg" },
+            { id: 4, user: "David Rodriguez", action: "published new module", time: "2 days ago", avatar: "https://randomuser.me/api/portraits/men/41.jpg" }
+        ];
+
+        // Main App Component
+        const App = () => {
+            const [darkMode, setDarkMode] = useState(false);
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [showModal, setShowModal] = useState(false);
+            const [selectedStudent, setSelectedStudent] = useState(null);
+            const [toast, setToast] = useState({ show: false, message: '', type: '' });
+            const [searchTerm, setSearchTerm] = useState('');
+            const [filteredCourses, setFilteredCourses] = useState(mockCourses);
+            const [filteredStudents, setFilteredStudents] = useState(mockStudents);
+
+            // Initialize dark mode based on system preference
+            useEffect(() => {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setDarkMode(prefersDark);
+            }, []);
+
+            // Apply dark mode class to body
+            useEffect(() => {
+                if (darkMode) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            }, [darkMode]);
+
+            // Filter courses based on search term
+            useEffect(() => {
+                if (!searchTerm) {
+                    setFilteredCourses(mockCourses);
+                    setFilteredStudents(mockStudents);
+                    return;
+                }
+                
+                const filtered = mockCourses.filter(course => 
+                    course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    course.instructor.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                
+                setFilteredCourses(filtered);
+                
+                const studentFiltered = mockStudents.filter(student => 
+                    student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    student.email.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                
+                setFilteredStudents(studentFiltered);
+            }, [searchTerm]);
+
+            const showToast = (message, type = 'success') => {
+                setToast({ show: true, message, type });
+                setTimeout(() => {
+                    setToast({ show: false, message: '', type: '' });
+                }, 3000);
+            };
+
+            const toggleDarkMode = () => {
+                setDarkMode(!darkMode);
+            };
+
+            const openStudentModal = (student) => {
+                setSelectedStudent(student);
+                setShowModal(true);
+            };
+
+            const closeStudentModal = () => {
+                setShowModal(false);
+                setSelectedStudent(null);
+            };
+
+            const renderDashboard = () => (
+                <div className="grid grid-cols-12 gap-6">
+                    {/* Metrics Cards */}
+                    <div className="col-span-12 md:col-span-3">
+                        <div className="metric-card animate-fade-in">
+                            <h3 className="text-2xl font-bold">24</h3>
+                            <p className="opacity-80">Active Courses</p>
+                        </div>
+                    </div>
+                    <div className="col-span-12 md:col-span-3">
+                        <div className="metric-card animate-fade-in" style={{background: 'linear-gradient(135deg, #64748b, #94a3b8)'}}>
+                            <h3 className="text-2xl font-bold">1,248</h3>
+                            <p className="opacity-80">Total Students</p>
+                        </div>
+                    </div>
+                    <div className="col-span-12 md:col-span-3">
+                        <div className="metric-card animate-fade-in" style={{background: 'linear-gradient(135deg, #10b981, #059669)'}}>
+                            <h3 className="text-2xl font-bold">89%</h3>
+                            <p className="opacity-80">Completion Rate</p>
+                        </div>
+                    </div>
+                    <div className="col-span-12 md:col-span-3">
+                        <div className="metric-card animate-fade-in" style={{background: 'linear-gradient(135deg, #f59e0b, #d97706)'}}>
+                            <h3 className="text-2xl font-bold">92%</h3>
+                            <p className="opacity-80">Satisfaction</p>
+                        </div>
+                    </div>
+
+                    {/* Charts Section */}
+                    <div className="col-span-12 lg:col-span-8">
+                        <div className="card">
+                            <h3 className="mb-4">Enrollment Trends</h3>
+                            <div className="chart-container">
+                                <canvas id="enrollmentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Recent Activity */}
+                    <div className="col-span-12 lg:col-span-4">
+                        <div className="card">
+                            <h3 className="mb-4">Recent Activity</h3>
+                            <div>
+                                {mockActivities.map(activity => (
+                                    <div key={activity.id} className="activity-item">
+                                        <img src={activity.avatar} alt={activity.user} className="activity-avatar" />
+                                        <div>
+                                            <p><strong>{activity.user}</strong> {activity.action}</p>
+                                            <p className="text-sm text-gray-500">{activity.time}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="col-span-12">
+                        <div className="card">
+                            <div className="flex justify-between items-center mb-4">
+                                <h3>Quick Actions</h3>
+                                <button className="btn btn-outline">
+                                    View All
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <button className="btn btn-primary flex flex-col items-center py-6">
+                                    <i className="fas fa-plus-circle text-2xl mb-2"></i>
+                                    New Course
+                                </button>
+                                <button className="btn btn-outline flex flex-col items-center py-6">
+                                    <i className="fas fa-user-plus text-2xl mb-2"></i>
+                                    Add Student
+                                </button>
+                                <button className="btn btn-outline flex flex-col items-center py-6">
+                                    <i className="fas fa-chart-line text-2xl mb-2"></i>
+                                    View Reports
+                                </button>
+                                <button className="btn btn-outline flex flex-col items-center py-6">
+                                    <i className="fas fa-cog text-2xl mb-2"></i>
+                                    Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderCourses = () => (
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2>Courses</h2>
+                        <div className="flex gap-2">
+                            <input 
+                                type="text" 
+                                placeholder="Search courses..." 
+                                className="form-control"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <button className="btn btn-primary">
+                                <i className="fas fa-plus mr-2"></i> New Course
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredCourses.map(course => (
+                            <div key={course.id} className="course-card animate-fade-in">
+                                <img src={course.image} alt={course.title} className="course-image" />
+                                <div className="course-content">
+                                    <h4 className="mb-2">{course.title}</h4>
+                                    <p className="text-sm text-gray-500 mb-3">by {course.instructor}</p>
+                                    <div className="mb-3">
+                                        <div className="flex justify-between text-sm mb-1">
+                                            <span>Progress</span>
+                                            <span>{course.progress}%</span>
+                                        </div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: `${course.progress}%`}}></div>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <button className="btn btn-outline btn-sm">
+                                            <i className="fas fa-edit mr-1"></i> Edit
+                                        </button>
+                                        <button className="btn btn-accent btn-sm">
+                                            <i className="fas fa-play mr-1"></i> Continue
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+
+            const renderStudents = () => (
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2>Students</h2>
+                        <div className="flex gap-2">
+                            <input 
+                                type="text" 
+                                placeholder="Search students..." 
+                                className="form-control"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <button className="btn btn-primary">
+                                <i className="fas fa-user-plus mr-2"></i> Add Student
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="card table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Enrollment Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredStudents.map(student => (
+                                    <tr key={student.id}>
+                                        <td className="flex items-center">
+                                            <img src={student.avatar} alt={student.name} className="avatar mr-3" />
+                                            {student.name}
+                                        </td>
+                                        <td>{student.email}</td>
+                                        <td>
+                                            <span className={`badge ${
+                                                student.status === 'active' ? 'badge-success' :
+                                                student.status === 'pending' ? 'badge-warning' :
+                                                student.status === 'completed' ? 'badge-info' : 'badge-danger'
+                                            }`}>
+                                                {student.status}
+                                            </span>
+                                        </td>
+                                        <td>{student.enrollmentDate}</td>
+                                        <td>
+                                            <button 
+                                                className="btn btn-outline btn-sm mr-2"
+                                                onClick={() => openStudentModal(student)}
+                                            >
+                                                View
+                                            </button>
+                                            <button className="btn btn-primary btn-sm">
+                                                Manage
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+
+            const renderContent = () => (
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2>Content Management</h2>
+                        <div className="flex gap-2">
+                            <button className="btn btn-primary">
+                                <i className="fas fa-upload mr-2"></i> Upload Content
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-12 gap-6">
+                        <div className="col-span-12 lg:col-span-8">
+                            <div className="card">
+                                <h3 className="mb-4">Create New Module</h3>
+                                <div className="form-group">
+                                    <label className="form-label">Module Title</label>
+                                    <input type="text" className="form-control" placeholder="Enter module title" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Description</label>
+                                    <textarea className="form-control" rows="4" placeholder="Enter module description"></textarea>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Content</label>
+                                    <div className="border rounded p-4 min-h-[200px]">
+                                        <p className="text-gray-500">Rich text editor would appear here</p>
+                                    </div>
+                                </div>
+                                <button className="btn btn-primary">Save Module</button>
+                            </div>
+                        </div>
+
+                        <div className="col-span-12 lg:col-span-4">
+                            <div className="card mb-6">
+                                <h3 className="mb-4">Media Library</h3>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {[1,2,3,4,5,6].map(i => (
+                                        <div key={i} className="aspect-square bg-gray-200 rounded flex items-center justify-center">
+                                            <i className="fas fa-image text-gray-500"></i>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="btn btn-outline w-full mt-4">
+                                    <i className="fas fa-plus mr-2"></i> Add Media
+                                </button>
+                            </div>
+
+                            <div className="card">
+                                <h3 className="mb-4">Version History</h3>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center pb-2 border-b">
+                                        <div>
+                                            <p className="font-medium">Initial Version</p>
+                                            <p className="text-sm text-gray-500">Created by Alex Johnson • 2 days ago</p>
+                                        </div>
+                                        <button className="btn btn-outline btn-sm">View</button>
+                                    </div>
+                                    <div className="flex justify-between items-center pb-2 border-b">
+                                        <div>
+                                            <p className="font-medium">Updated Content</p>
+                                            <p className="text-sm text-gray-500">Updated by Sarah Williams • 1 day ago</p>
+                                        </div>
+                                        <button className="btn btn-outline btn-sm">View</button>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <p className="font-medium">Final Review</p>
+                                            <p className="text-sm text-gray-500">Reviewed by Michael Chen • 6 hours ago</p>
+                                        </div>
+                                        <button className="btn btn-outline btn-sm">View</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderAnalytics = () => (
+                <div>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2>Analytics & Reports</h2>
+                        <div className="flex gap-2">
+                            <button className="btn btn-outline">
+                                <i className="fas fa-download mr-2"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-12 gap-6">
+                        <div className="col-span-12 lg:col-span-6">
+                            <div className="card">
+                                <h3 className="mb-4">Course Completion Rates</h3>
+                                <div className="chart-container">
+                                    <canvas id="completionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-span-12 lg:col-span-6">
+                            <div className="card">
+                                <h3 className="mb-4">Student Engagement</h3>
+                                <div className="chart-container">
+                                    <canvas id="engagementChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-span-12">
+                            <div className="card">
+                                <h3 className="mb-4">Performance Overview</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full">
+                                        <thead>
+                                            <tr>
+                                                <th>Course</th>
+                                                <th>Instructor</th>
+                                                <th>Avg. Score</th>
+                                                <th>Completion Rate</th>
+                                                <th>Students Enrolled</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Advanced React Development</td>
+                                                <td>Alex Johnson</td>
+                                                <td>87%</td>
+                                                <td>92%</td>
+                                                <td>142</td>
+                                            </tr>
+                                            <tr>
+                                                <td>UI/UX Design Principles</td>
+                                                <td>Sarah Williams</td>
+                                                <td>91%</td>
+                                                <td>88%</td>
+                                                <td>98</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Data Science Fundamentals</td>
+                                                <td>Michael Chen</td>
+                                                <td>85%</td>
+                                                <td>95%</td>
+                                                <td>126</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderActiveContent = () => {
+                switch(activeTab) {
+                    case 'dashboard': return renderDashboard();
+                    case 'courses': return renderCourses();
+                    case 'students': return renderStudents();
+                    case 'content': return renderContent();
+                    case 'analytics': return renderAnalytics();
+                    default: return renderDashboard();
+                }
+            };
+
+            // Initialize charts after component mounts
+            useEffect(() => {
+                // Enrollment Chart
+                const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
+                new Chart(enrollmentCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'New Enrollments',
+                            data: [120, 190, 150, 220, 180, 250],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // Completion Chart
+                const completionCtx = document.getElementById('completionChart').getContext('2d');
+                new Chart(completionCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['React', 'UI/UX', 'Data Science', 'Cloud', 'ML', 'Marketing'],
+                        datasets: [{
+                            label: 'Completion Rate (%)',
+                            data: [92, 88, 95, 78, 85, 72],
+                            backgroundColor: [
+                                'rgba(37, 99, 235, 0.7)',
+                                'rgba(37, 99, 235, 0.7)',
+                                'rgba(37, 99, 235, 0.7)',
+                                'rgba(37, 99, 235, 0.7)',
+                                'rgba(37, 99, 235, 0.7)',
+                                'rgba(37, 99, 235, 0.7)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+
+                // Engagement Chart
+                const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+                new Chart(engagementCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['High Engagement', 'Medium Engagement', 'Low Engagement'],
+                        datasets: [{
+                            data: [45, 35, 20],
+                            backgroundColor: [
+                                '#10b981',
+                                '#f59e0b',
+                                '#ef4444'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }, []);
+
+            return (
+                <div className="min-h-screen">
+                    {/* Header */}
+                    <header className="header">
+                        <div className="container py-4 flex justify-between items-center">
+                            <div className="flex items-center">
+                                <div className="text-2xl font-bold text-primary mr-10">EduManage</div>
+                                <nav className="hidden md:flex">
+                                    <a href="#" className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>Dashboard</a>
+                                    <a href="#" className={`nav-link ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => setActiveTab('courses')}>Courses</a>
+                                    <a href="#" className={`nav-link ${activeTab === 'students' ? 'active' : ''}`} onClick={() => setActiveTab('students')}>Students</a>
+                                    <a href="#" className={`nav-link ${activeTab === 'content' ? 'active' : ''}`} onClick={() => setActiveTab('content')}>Content</a>
+                                    <a href="#" className={`nav-link ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>Analytics</a>
+                                </nav>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <button className="theme-toggle" onClick={toggleDarkMode}>
+                                    {darkMode ? (
+                                        <i className="fas fa-sun"></i>
+                                    ) : (
+                                        <i className="fas fa-moon"></i>
+                                    )}
+                                </button>
+                                <div className="relative">
+                                    <button className="relative">
+                                        <i className="fas fa-bell text-xl"></i>
+                                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                                    </button>
+                                </div>
+                                <div className="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="User" className="avatar" />
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div className="container py-8">
+                        <div className="grid grid-cols-12 gap-6">
+                            {/* Sidebar */}
+                            <div className="col-span-12 md:col-span-3 lg:col-span-2">
+                                <div className="sidebar">
+                                    <div className="px-4 mb-6">
+                                        <h3 className="text-lg font-semibold mb-4">Navigation</h3>
+                                        <a href="#" className={`sidebar-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>
+                                            <i className="fas fa-home"></i> Dashboard
+                                        </a>
+                                        <a href="#" className={`sidebar-item ${activeTab === 'courses' ? 'active' : ''}`} onClick={() => setActiveTab('courses')}>
+                                            <i className="fas fa-book"></i> Courses
+                                        </a>
+                                        <a href="#" className={`sidebar-item ${activeTab === 'students' ? 'active' : ''}`} onClick={() => setActiveTab('students')}>
+                                            <i className="fas fa-users"></i> Students
+                                        </a>
+                                        <a href="#" className={`sidebar-item ${activeTab === 'content' ? 'active' : ''}`} onClick={() => setActiveTab('content')}>
+                                            <i className="fas fa-folder"></i> Content
+                                        </a>
+                                        <a href="#" className={`sidebar-item ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>
+                                            <i className="fas fa-chart-bar"></i> Analytics
+                                        </a>
+                                    </div>
+                                    
+                                    <div className="px-4">
+                                        <h3 className="text-lg font-semibold mb-4">Settings</h3>
+                                        <a href="#" className="sidebar-item">
+                                            <i className="fas fa-cog"></i> General
+                                        </a>
+                                        <a href="#" className="sidebar-item">
+                                            <i className="fas fa-user-cog"></i> Account
+                                        </a>
+                                        <a href="#" className="sidebar-item">
+                                            <i className="fas fa-question-circle"></i> Help
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Main Content */}
+                            <div className="col-span-12 md:col-span-9 lg:col-span-10">
+                                {renderActiveContent()}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Student Modal */}
+                    {showModal && selectedStudent && (
+                        <div className="modal-overlay" onClick={closeStudentModal}>
+                            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h3>Student Profile</h3>
+                                    <button onClick={closeStudentModal} className="text-2xl">&times;</button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="flex items-center mb-6">
+                                        <img src={selectedStudent.avatar} alt={selectedStudent.name} className="avatar w-16 h-16 mr-4" />
+                                        <div>
+                                            <h4 className="text-xl font-semibold">{selectedStudent.name}</h4>
+                                            <p className="text-gray-500">{selectedStudent.email}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 gap-4 mb-6">
+                                        <div>
+                                            <p className="text-sm text-gray-500">Status</p>
+                                            <p>
+                                                <span className={`badge ${
+                                                    selectedStudent.status === 'active' ? 'badge-success' :
+                                                    selectedStudent.status === 'pending' ? 'badge-warning' :
+                                                    selectedStudent.status === 'completed' ? 'badge-info' : 'badge-danger'
+                                                }`}>
+                                                    {selectedStudent.status}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Enrollment Date</p>
+                                            <p>{selectedStudent.enrollmentDate}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="mb-6">
+                                        <h5 className="font-semibold mb-3">Enrolled Courses</h5>
+                                        <ul className="space-y-2">
+                                            <li className="flex justify-between">
+                                                <span>Advanced React Development</span>
+                                                <span className="text-success">Completed</span>
+                                            </li
